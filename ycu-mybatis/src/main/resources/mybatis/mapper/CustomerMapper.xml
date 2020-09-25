@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wyf.ycu.mybatis.mapper.CustomerMapper">
+    <resultMap id="BaseResultMap" type="com.wyf.ycu.mybatis.model.Customer">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="VARCHAR"/>
+        <result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.wyf.ycu.mybatis.model.Customer">
+        INSERT INTO
+            customer(username,password,sex)
+        VALUES(
+            #{username},#{password},#{sex}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.wyf.ycu.mybatis.model.Customer">
+        UPDATE
+            customer
+        SET
+            <if test="username != null">username = #{username},</if>
+            <if test="password != null">password = #{password},</if>
+            nick_name = #{nickName}
+        WHERE
+            id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        DELETE FROM
+            customer
+        WHERE
+            id=#{id}
+    </delete>
+
+    <!-- 抽取公共的列-->
+    <sql id="Base_Column_List">
+        id,username,password,sex,nick_name
+    </sql>
+
+    <select id="getAll" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM customer
+    </select>
+
+    <select id="getOne" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM customer
+        WHERE id=#{id}
+    </select>
+
+</mapper>
